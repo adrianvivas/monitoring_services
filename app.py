@@ -1,9 +1,16 @@
 from flask import Flask, request, jsonify
 from flask_restful import Api, Resource
+from flask_cors import CORS
 import psutil
 
 app = Flask(__name__)
+CORS(app)
+#cors = CORS(app, resources={r"/api/*":{"origins": "*"}})
 api = Api(app)
+
+#@app.route('/api/v1/users')
+#def list_users():
+ #   return "user example"
 
 class Main(Resource):
     def get(self):
@@ -15,10 +22,10 @@ class GetStorage(Resource):
         return jsonify({
             "message": "System storage",
             "value": {
-                "Total": storage[0],
-                "Used": storage[1],
-                "Free": storage[2],
-                "Percent": storage[3]
+                "total": storage[0],
+                "used": storage[1],
+                "free": storage[2],
+                "percent": storage[3]
                 }
             })
     
@@ -28,11 +35,11 @@ class GetMemory(Resource):
         return jsonify({
             "message": "RAM memory",
             "value": {
-                "Total": memory[0],
-                "Avaliable": memory[1],
-                "Percent": memory[2],
-                "Used": memory[3],
-                "Free": memory[4]
+                "total": memory[0],
+                "avaliable": memory[1],
+                "percent": memory[2],
+                "used": memory[3],
+                "free": memory[4]
                 }
             })
 
@@ -41,4 +48,4 @@ api.add_resource(GetMemory, '/memory')
 api.add_resource(Main, '/')
 
 if __name__ == '__main__':
-    app.run(debug=True, port=4000)
+    app.run('192.168.0.23',4000,debug=True)
